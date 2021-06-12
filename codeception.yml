@@ -1,0 +1,21 @@
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+actor_suffix: Tester
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+coverage:
+    enabled: true
+    low_limit: 50
+    high_limit: 90
+    include:
+        - src/Architecture/*
+    exclude:
+        - src/Architecture/Infrastructure/*
+        - src/Architecture/UI/*
+        - src/Architecture/Domain/Vault/*
+        - src/Architecture/Application/UseCases/Command/Swagger/*

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="3.9.3@2e4154d76e24d1b4e59e6cc2bebef7790cb9e550">
+  <file src="src/MethodsComparison/Comparators/BaseComparator.php">
+    <PossiblyFalseArgument occurrences="4">
+      <code>getenv('SERVICE_NAME')</code>
+      <code>getenv('SERVICE_NAME')</code>
+      <code>getenv('SERVICE_NAME')</code>
+      <code>getenv('SERVICE_NAME')</code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="src/MethodsComparison/RabbitConsumer/OldMethodsComparisonConsumer.php">
+    <PossiblyNullArgument occurrences="1">
+      <code>$service</code>
+    </PossiblyNullArgument>
+  </file>
+</files>

@@ -1,0 +1,12 @@
+api:
+  resource: ../src/Architecture/UI/Http/Rest/Controller/
+  type: annotation
+  prefix: /api/v1/
+
+_swagger-ui:
+  resource: '@HBSwaggerUiBundle/Resources/config/routing.yml'
+  prefix: /api/docs/
+
+metrics:
+  path: /prometheus/metrics
+  controller: Architecture\UI\Http\Rest\Controller\MetricsController::metrics

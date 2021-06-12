@@ -1,0 +1,20 @@
+framework:
+  messenger:
+    default_bus: messenger.bus.command
+    transports:
+      sync:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        retry_strategy:
+          max_retries: 0
+    buses:
+      messenger.bus.command:
+        default_middleware: false
+        middleware:
+          - send_message
+          - handle_message
+          - failed_message_processing_middleware
+      messenger.bus.query:
+        default_middleware: false
+        middleware:
+          - handle_message
+          - failed_message_processing_middleware

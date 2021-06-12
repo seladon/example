@@ -1,0 +1,9 @@
+monolog:
+  channels: [ 'api', 'app', 'kafka', 'messenger', 'csv', 'sap', 'poslog']
+  handlers:
+    fluentd:
+      type: stream
+      level: info
+      path: 'php://stdout'
+      formatter: 'monolog.formatter.json'
+      channels: [ 'api', 'app', 'kafka', 'messenger', 'csv', 'sap', 'poslog' ]

@@ -1,0 +1,9 @@
+kafka:
+  internal:
+    producer:
+      produce-success: Отправили в топик сообщения
+    pim-consumer:
+      invalid-message: Тип и/или данные сообщения некорректны или нераспознаны
+      insufficient-data: Недостаточо данных для сущности "%name%"
+vault:
+  get-error: Не удалось получить конфиг из Vault

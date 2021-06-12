@@ -1,0 +1,9 @@
+parameters:
+  sets:
+    - 'clean-code'
+    - 'psr12'
+    - 'symfony'
+  skip:
+    PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer: ~
+    PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer: ~
+    PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer: ~

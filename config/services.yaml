@@ -1,0 +1,89 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+
+imports:
+  - { resource: './parameters.yaml' }
+  #php bin/console doctrine:migrations:generate
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    bind:
+      $eventBus: '@Architecture\Infrastructure\Shared\Core\EventHandling\EventBus'
+
+  _instanceof:
+    Architecture\Application\UseCases\Command\CommandHandlerInterface:
+      public: true
+      tags:
+        - { name: messenger.message_handler, bus: messenger.bus.command }
+
+    Architecture\Application\UseCases\Query\QueryHandlerInterface:
+      public: true
+      tags:
+        - { name: messenger.message_handler, bus: messenger.bus.query }
+
+    Architecture\Infrastructure\Shared\Core\EventHandling\EventListener:
+      public: true
+      tags:
+        - { name: eshop.domain.event_listener }
+
+    Architecture\Infrastructure\Shared\EventListener\ApiEventSubscriber:
+      public: true
+      autowire: true
+      tags:
+        - { name: kernel.event_listener }
+
+  App\:
+    resource: '../src/App/*'
+    exclude:
+      - '../src/App/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+  Architecture\:
+    resource: '../src/Architecture/*'
+
+  Architecture\UI\Http\Rest\Controller\:
+    resource: '../src/Architecture/UI/Http/Rest/Controller/*'
+    tags: [ 'controller.service_arguments' ]
+
+  Monolog\Processor\WebProcessor:
+    tags:
+      - { name: monolog.processor, channel: api }
+
+  Monolog\Processor\IntrospectionProcessor:
+    tags:
+      - { name: monolog.processor, channel: app }
+
+  Monolog\Formatter\LogstashFormatter:
+    arguments:
+      $applicationName: '%env(resolve:SERVICE_NAME)%'
+
+  logs.handler.fanout:
+    class: 'Monolog\Handler\WhatFailureGroupHandler'
+    arguments:
+      - [ '@monolog.handler.stderr' ]
+
+  Architecture\Application\UseCases\Command\Swagger\Link\LinkCommand:
+    arguments: [ '%kernel.project_dir%' ]
+
+  Architecture\Infrastructure\Shared\Bus\Command\MessengerCommandBus:
+    public: true
+    arguments:
+      - '@messenger.bus.command'
+    tags:
+      - { name: eshop.messenger.command_bus }
+
+  Architecture\Infrastructure\Shared\Bus\Query\MessengerQueryBus:
+    arguments:
+      - '@messenger.bus.query'
+    tags:
+      - { name: eshop.messenger.query_bus }
+
+  Architecture\Infrastructure\Redis\Service\RedisService:
+    arguments:
+      $redisHost: "%env(REDIS_HOST)%"
+      $redisPass: "%env(REDIS_PASSWORD)%"
+      $redisService: "%env(REDIS_SERVICE)%"

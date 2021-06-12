@@ -1,0 +1,72 @@
+openapi: 3.0.3
+
+info:
+  title: Микросервис
+  description: Микросервис создает пользователя
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+
+paths:
+  /api/v1/health/test:
+    get:
+      summary: Проверка жизнеспособности сервиса
+      operationId: CheckService_CheckHealth
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref:  '#/components/schemas/user_service_v1HealthResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runtimeError'
+      tags:
+        - CheckService
+  /api/v1/users/create:
+    post:
+      summary: Создание пользователя
+      operationId: Userservice_createuser
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_service_v1Success'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runtimeError'
+      tags:
+        - Userservice
+components:
+  schemas:
+    user_service_v1HealthResponse:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        serviceStatus:
+          type: string
+      title: Объект с информацией о работоспособности сервиса
+    runtimeError:
+      title: Объект ошибки
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        debug:
+          type: string

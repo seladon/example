@@ -1,0 +1,38 @@
+monolog:
+  channels: ['api', 'app', 'kafka', 'csv', 'sap', 'poslog']
+  handlers:
+    dev:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/dev.log"
+      channels: [ '!api', '!app', '!kafka' , '!csv', '!sap', '!poslog']
+    api:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/api.log"
+      channels: [ 'api' ]
+    app:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/app.log"
+      channels: [ 'app', 'messenger' ]
+    kafka:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/kafka.log"
+      channels: [ 'kafka' ]
+    import:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/csv.log"
+      channels: [ 'csv' ]
+    sap:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/sap.log"
+      channels: [ 'sap' ]
+    poslog:
+      type: rotating_file
+      level: debug
+      path: "%kernel.logs_dir%/%kernel.environment%/poslog.log"
+      channels: [ 'poslog' ]

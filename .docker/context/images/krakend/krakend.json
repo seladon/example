@@ -1,0 +1,66 @@
+{
+    "version": 2,
+    "extra_config": {
+        "github_com/devopsfaith/krakend-gologging": {
+            "level": "INFO",
+            "prefix": "[KRAKEND]",
+            "syslog": true,
+            "stdout": true,
+            "format": "custom",
+            "custom_format": "%{message}"
+        },
+        "github_com/devopsfaith/krakend-opencensus": {
+            "sample_rate": 100,
+            "reporting_period": 1,
+            "enabled_layers": {
+                "backend": true,
+                "router": true
+            },
+            "exporters": {
+                "zipkin": {
+                    "collector_url": "http://jaeger:9411/api/v2/spans",
+                    "service_name": "krakend"
+                },
+                "jaeger": {
+                    "endpoint": "http://jaeger:14268/api/traces",
+                    "service_name":"krakend"
+                },
+                "logger": {
+                    "stats": true,
+                    "spans": true
+                }
+            }
+        }
+
+    },
+    "timeout": "300s",
+    "cache_ttl": "3s",
+    "name": "example-gateway",
+    "endpoints": [
+        {
+            "endpoint": "/api/v1/users/create",
+            "method": "POST",
+            "extra_config": {  },
+            "output_encoding": "json",
+            "concurrent_calls": 1,
+            "querystring_params": [
+                "*"
+            ],
+            "headers_to_pass": [
+                "*"
+            ],
+            "backend": [
+                {
+                    "url_pattern": "/api/v1/users/create",
+                    "encoding": "json",
+                    "sd": "static",
+                    "extra_config": { },
+                    "host": [
+                        "http://nginx"
+                    ],
+                    "disable_host_sanitize": false
+                }
+            ]
+        }
+    ]
+}

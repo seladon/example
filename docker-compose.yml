@@ -1,0 +1,110 @@
+version: "3.7"
+
+services:
+  krakend:
+    image: devopsfaith/krakend:latest
+    command: run -d -c /etc/krakend/krakend.json
+    depends_on:
+      - nginx
+    ports:
+      - "8402:8080"
+    volumes:
+      - ./.docker/context/images/krakend:/etc/krakend
+    networks:
+      - service-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.6
+    depends_on:
+      - nginx
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    networks:
+      - service-network
+
+  nginx:
+    restart: unless-stopped
+    container_name: nginx
+    build:
+      context: ./.docker/context
+      dockerfile: images/nginx/Dockerfile
+      args:
+        PHP_FPM_SERVICE_NAME: php-fpm
+    ports:
+      - ${NGINX_PORT}:80
+    volumes:
+      - ./:/var/www
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - php-fpm
+    networks:
+      - service-network
+
+  php-fpm:
+    restart: unless-stopped
+    container_name: php-fpm
+    build:
+      context: ./.docker/context
+      dockerfile: images/php-fpm/dev/Dockerfile
+    environment:
+      PHP_IDE_CONFIG: serverName=php-fpm
+      APP_ENV: dev
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www/
+    depends_on:
+      - mysql
+    networks:
+      - service-network
+
+  memcached:
+    restart: unless-stopped
+    image: memcached:1.6.7-alpine
+    container_name: memcached
+    command: [ "-m", "512m" ]
+    ports:
+      - ${MEMCACHED_PORT}:11211
+    networks:
+      - service-network
+
+  mysql:
+    restart: unless-stopped
+    build:
+      context: ./.docker/context
+      dockerfile: images/mysql/Dockerfile
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql
+      - ./.docker/conf/mysql/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - service-network
+
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - service-network
+
+networks:
+  liveprof-network:
+    name: liveprof-network
+    external: true
+  service-network:
+    name: service-network

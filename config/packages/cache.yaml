@@ -1,0 +1,7 @@
+framework:
+    cache:
+        default_redis_provider: '%env(resolve:REDIS_URL)%'
+        prefix_seed: '%env(SERVICE_NAME)%_%env(CACHE_KEY_NAMESPACE)%'
+        app: cache.adapter.redis
+
+
