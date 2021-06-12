@@ -20,18 +20,19 @@ paths:
             application/json:
               schema:
                 $ref:  '#/components/schemas/user_service_v1HealthResponse'
-        default:
-          description: An unexpected error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/runtimeError'
       tags:
         - CheckService
   /api/v1/users/create:
     post:
       summary: Создание пользователя
       operationId: Userservice_createuser
+      requestBody:
+        description: Создание пользователя
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_service_v1Create'
       responses:
         '200':
           description: A successful response.
@@ -39,34 +40,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user_service_v1Success'
-        default:
-          description: An unexpected error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/runtimeError'
       tags:
         - Userservice
 components:
   schemas:
+    user_service_v1Create:
+      type: object
+      description: A JSON object containing information
+      required: true
+      properties:
+        userFirstName:
+          type: string
+        userLastName:
+          type: string
+        userEmail:
+          type: string
+        phone:
+          type: string
+    user_service_v1Success:
+      type: object
+      properties:
+        userId:
+          type: integer
     user_service_v1HealthResponse:
       type: object
       properties:
-        serviceName:
-          type: string
-        serviceStatus:
+        status:
           type: string
       title: Объект с информацией о работоспособности сервиса
-    runtimeError:
-      title: Объект ошибки
-      type: object
-      properties:
-        error:
-          type: string
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        debug:
-          type: string
