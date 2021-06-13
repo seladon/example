@@ -8,6 +8,9 @@
 actor: FunctionalTester
 modules:
     enabled:
+        - Symfony:
+            kernel_class: 'Architecture\Infrastructure\Kernel'
+            app_path: src/Architecture/Infrastructure
         # add a framework module here
         - \Helper\Functional
     step_decorators: ~        

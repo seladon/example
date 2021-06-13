@@ -55,7 +55,7 @@ COPY ./ssh /root/.ssh
 RUN chown -R root:root /root/.ssh && printf "Host *\n\tStrictHostKeyChecking no" > /root/.ssh/config && chmod -R 0600 /root/.ssh
 
 ### permissions ###
-RUN mkdir -p /var/www/var/cache /var/www/var/log && chmod -R 777 /var/www/var
+RUN mkdir -p /var/www/var/cache /var/www/var/log /var/www/tests/_output && chmod -R 777 /var/www/var
 RUN addgroup -gid $WWW_GROUP_GID  www
 RUN adduser www \
 	-uid  $WWW_USER_UID \
@@ -65,4 +65,4 @@ RUN adduser www \
 	--quiet \
 	--system
 
-RUN mkdir -p /var/www/var/cache /var/www/var/log && chown -R $WWW_USER_UID:$WWW_USER_UID /var/www/var
+RUN chown -R $WWW_USER_UID:$WWW_USER_UID /var/www/var /var/www/tests/_output && chmod -R 777 /var/www/tests/_output

@@ -64,6 +64,10 @@ register_shutdown_function(
     }
 );
 
+if($_SERVER['APP_ENV'] == 'dev') {
+    include  dirname(__DIR__).'/c3.php';
+}
+
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);

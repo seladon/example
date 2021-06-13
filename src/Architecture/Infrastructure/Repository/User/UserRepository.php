@@ -60,7 +60,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
             $result[] = (new User())
                 ->setPhone((Phone::create($user->getPhone())))
                 ->setEmail(Email::create($user->getEmail()))
-                ->setFirstName($user->getLastName())
+                ->setFirstName($user->getFirstName())
                 ->setLastName($user->getLastName());
         }
         return $result;
@@ -83,7 +83,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
             ->setId($user->getId())
             ->setPhone((Phone::create($user->getPhone())))
             ->setEmail(Email::create($user->getEmail()))
-            ->setFirstName($user->getLastName())
+            ->setFirstName($user->getFirstName())
             ->setLastName($user->getLastName());
     }
 }

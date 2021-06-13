@@ -1,3 +1,5 @@
+params:
+    - .env
 paths:
     tests: tests
     output: tests/_output
@@ -16,6 +18,6 @@ coverage:
         - src/Architecture/*
     exclude:
         - src/Architecture/Infrastructure/*
-        - src/Architecture/UI/*
-        - src/Architecture/Domain/Vault/*
         - src/Architecture/Application/UseCases/Command/Swagger/*
+        - src/Architecture/UI/Http/Rest/Controller/CommandQueryController.php
+        - src/Architecture/UI/Http/Rest/Controller/QueryController.php

@@ -37,10 +37,10 @@ class AddUserArgumentResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
         $content = json_decode($request->getContent(), true);
-        $userFirstName = (string)$content['userFirstName'] ?? '';
-        $userLastName = (string)$content['userLastName'] ?? '';
-        $userEmail = (string)$content['userEmail'] ?? '';
-        $phone = (string)$content['phone'] ?? '';
+        $userFirstName = $content['firstName'] ?? '';
+        $userLastName = $content['lastName'] ?? '';
+        $userEmail = $content['email'] ?? '';
+        $phone = $content['phone'] ?? '';
         yield new CreateUserCommand($userFirstName, $userLastName, $userEmail, $phone);
     }
 }

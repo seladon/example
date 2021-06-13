@@ -44,6 +44,8 @@ services:
 
   Architecture\:
     resource: '../src/Architecture/*'
+    exclude:
+      - '../src/Architecture/Infrastructure/{Migrations,Kernel.php}'
 
   Architecture\UI\Http\Rest\Controller\:
     resource: '../src/Architecture/UI/Http/Rest/Controller/*'

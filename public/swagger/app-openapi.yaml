@@ -48,15 +48,15 @@ components:
       type: object
       description: A JSON object containing information
       required: true
-      properties:
-        userFirstName:
-          type: string
-        userLastName:
-          type: string
-        userEmail:
-          type: string
-        phone:
-          type: string
+        properties:
+          firstName:
+            type: string
+          lastName:
+            type: string
+          email:
+            type: string
+          phone:
+            type: string
     user_service_v1Success:
       type: object
       properties:
